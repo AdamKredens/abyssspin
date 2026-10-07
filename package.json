@@ -1,0 +1,16 @@
+{
+  "name": "abyss-spin",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check api/[...route].js && node --check lib/backend.js && node --check lib/validation.js"
+  },
+  "dependencies": {
+    "nodemailer": "^6.10.1",
+    "pg": "^8.16.3"
+  }
+}

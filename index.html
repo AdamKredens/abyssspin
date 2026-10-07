@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#080a0e">
+    <title>Abyss Spin — rotacja drużyn</title>
+    <link rel="stylesheet" href="style.css?v=20261007-levels1">
+  </head>
+  <body>
+    <section id="login-screen" class="login-screen">
+      <div class="login-card">
+        <a class="brand login-brand" href="#" aria-label="Abyss Spin">
+          <span class="brand-mark"><svg class="brand-symbol" viewBox="0 0 32 32" aria-hidden="true"><path d="m6 21 6-3.3 1.1-4.8 9.5-5.1-3.2 7.3 6.1-3.3-4.1 8-5.7 2.6-3.4-2.4-4 4 .9-5.3z"/><path d="m11.4 19.3 5.5-3.2m-2.2 5 4.4-2.5m-6.6-4.2 4.3-2.3" /></svg></span>
+          <span class="brand-wordmark"><span class="brand-accent">ABYSS</span><b class="brand-spin">SPIN</b></span>
+        </a>
+        <p class="login-kicker"><i></i> CALL OF DUTY / WARZONE</p>
+        <h1 id="login-heading">Witaj <span>w wirtualnej rotacji.</span></h1>
+        <p id="login-description" class="login-description">Zaloguj się, aby zapisać swoje składy i rotacje na koncie.</p>
+        <form id="auth-form" class="auth-form">
+          <label for="auth-username">LOGIN</label>
+          <input id="auth-username" name="username" type="text" minlength="3" maxlength="32" autocomplete="username" required>
+          <div id="auth-email-field" hidden>
+            <label for="auth-email">ADRES E-MAIL</label>
+            <input id="auth-email" name="email" type="email" maxlength="254" autocomplete="email" placeholder="np. gracz@example.com" disabled>
+          </div>
+          <label for="auth-password">HASŁO</label>
+          <input id="auth-password" name="password" type="password" minlength="8" maxlength="128" autocomplete="current-password" required>
+          <p id="auth-error" class="auth-error" role="alert" aria-live="polite" hidden></p>
+          <button id="auth-submit" class="auth-submit" type="submit">ZALOGUJ SIĘ</button>
+        </form>
+        <form id="reset-request-form" class="auth-form recovery-form" hidden>
+          <label for="reset-email">ADRES E-MAIL</label>
+          <input id="reset-email" name="email" type="email" maxlength="254" autocomplete="email" placeholder="np. gracz@example.com" required>
+          <p id="reset-request-status" class="auth-error" role="status" aria-live="polite" hidden></p>
+          <button id="reset-request-submit" class="auth-submit" type="submit">WYŚLIJ LINK DO ZMIANY HASŁA</button>
+        </form>
+        <form id="reset-password-form" class="auth-form recovery-form" hidden>
+          <label for="reset-new-password">NOWE HASŁO</label>
+          <input id="reset-new-password" name="new-password" type="password" minlength="8" maxlength="128" autocomplete="new-password" required>
+          <label for="reset-confirm-password">POWTÓRZ NOWE HASŁO</label>
+          <input id="reset-confirm-password" name="confirm-password" type="password" minlength="8" maxlength="128" autocomplete="new-password" required>
+          <p id="reset-password-status" class="auth-error" role="alert" aria-live="polite" hidden></p>
+          <button id="reset-password-submit" class="auth-submit" type="submit">USTAW NOWE HASŁO</button>
+        </form>
+        <p id="auth-switch-row" class="auth-switch"><span id="auth-switch-label">Nie masz konta?</span> <button id="auth-switch" type="button">Utwórz je</button></p>
+        <p id="auth-forgot" class="auth-forgot"><button id="auth-forgot-button" type="button">Zapomniałem hasła</button></p>
+        <p id="recovery-back" class="auth-switch" hidden><button id="recovery-back-button" type="button">Wróć do logowania</button></p>
+        <p class="auth-security">Hasła są bezpiecznie haszowane, a dane konta pozostają na tym komputerze.</p>
+      </div>
+      <footer class="login-footer">
+        <span class="footer-brand-mark" aria-label="Abyss Spin"><svg class="brand-symbol" viewBox="0 0 32 32" role="img" aria-hidden="true"><path d="m6 21 6-3.3 1.1-4.8 9.5-5.1-3.2 7.3 6.1-3.3-4.1 8-5.7 2.6-3.4-2.4-4 4 .9-5.3z"/><path d="m11.4 19.3 5.5-3.2m-2.2 5 4.4-2.5m-6.6-4.2 4.3-2.3"/></svg><strong><span>ABYSS</span> <b class="brand-spin">SPIN</b></strong><i>· created by Kreda95</i></span>
+        <nav class="legal-links" aria-label="Informacje prawne">
+          <a href="terms.html">Warunki korzystania</a><span aria-hidden="true">·</span><a href="privacy.html">Polityka prywatności</a>
+        </nav>
+      </footer>
+    </section>
+
+    <dialog id="profile-dialog" class="profile-dialog">
+      <div class="profile-panel">
+        <div class="profile-heading"><div><p class="login-kicker"><i></i> KONTO ABYSS SPIN</p><h2>Mój profil<span>.</span></h2></div><button id="profile-close" class="profile-close" type="button" aria-label="Zamknij profil">×</button></div>
+        <div class="profile-account"><div class="profile-avatar" id="profile-avatar"><span id="profile-initial">A</span><img id="profile-avatar-image" alt="Avatar profilu" hidden></div><div><strong id="profile-account-name">Admin</strong><small>PROFIL GRACZA</small></div></div>
+        <section class="profile-level" aria-label="Postęp poziomu">
+          <div class="profile-level-heading">
+            <div><p class="login-kicker"><i></i> POSTĘP GRACZA</p><strong>LEVEL <span id="profile-level">1</span></strong></div>
+            <span id="profile-xp-label">0 / 100 EXP</span>
+          </div>
+          <div id="profile-xp-bar" class="profile-xp-bar" role="progressbar" aria-label="Postęp do następnego levelu" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="profile-xp-progress"></span></div>
+          <p id="profile-total-xp">Łącznie zdobyto 0 EXP</p>
+        </section>
+        <form id="profile-form" class="profile-form">
+          <label class="avatar-upload" for="avatar-file"><span>＋ ZMIEŃ AVATAR</span><small>PNG, JPEG lub WEBP · maks. 10 MB</small></label>
+          <input id="avatar-file" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+          <label for="discord-name">NAZWA DISCORD</label>
+          <input id="discord-name" name="discord-name" type="text" maxlength="48" placeholder="np. Kreda95">
+          <label for="activision-id">ACTIVISION ID</label>
+          <input id="activision-id" name="activision-id" type="text" maxlength="64" placeholder="np. Gracz#1234567">
+          <label for="profile-email">ADRES E-MAIL</label>
+          <input id="profile-email" name="profile-email" type="email" maxlength="254" autocomplete="email" placeholder="np. gracz@example.com">
+          <p id="profile-error" class="auth-error" role="alert" aria-live="polite" hidden></p>
+          <button id="profile-save" class="auth-submit" type="submit">ZAPISZ PROFIL</button>
+        </form>
+        <section class="profile-password">
+          <div class="password-dialog-heading"><p class="login-kicker"><i></i> BEZPIECZEŃSTWO</p><h3>Zmień hasło</h3></div>
+          <form id="password-form" class="password-form">
+            <label for="current-password">OBECNE HASŁO</label>
+            <input id="current-password" name="current-password" type="password" autocomplete="current-password" required>
+            <label for="new-password">NOWE HASŁO</label>
+            <input id="new-password" name="new-password" type="password" minlength="8" maxlength="128" autocomplete="new-password" required>
+            <label for="confirm-password">POWTÓRZ NOWE HASŁO</label>
+            <input id="confirm-password" name="confirm-password" type="password" minlength="8" maxlength="128" autocomplete="new-password" required>
+            <p id="password-error" class="auth-error" role="alert" aria-live="polite" hidden></p>
+            <button id="password-submit" class="auth-submit" type="submit">ZAPISZ NOWE HASŁO</button>
+          </form>
+        </section>
+      </div>
+    </dialog>
+
+    <dialog id="admin-dialog" class="profile-dialog admin-dialog">
+      <section class="profile-panel">
+        <div class="profile-heading">
+          <div><p class="login-kicker"><i></i> ABYSS SPIN · ADMIN</p><h2>Panel administracyjny<span>.</span></h2></div>
+          <button id="admin-close" class="profile-close" type="button" aria-label="Zamknij panel administracyjny">×</button>
+        </div>
+        <p class="admin-description">Nowe konta uzyskają dostęp do aplikacji po zatwierdzeniu.</p>
+        <div class="admin-section-heading"><h3>Oczekujące konta</h3><span id="pending-count" class="count-pill">0</span></div>
+        <p id="admin-error" class="auth-error" role="alert" aria-live="polite" hidden></p>
+        <div id="pending-users" class="pending-users"></div>
+        <p id="pending-empty" class="empty-note">Brak kont oczekujących na zatwierdzenie.</p>
+        <section class="admin-webhook-section">
+          <div class="admin-section-heading"><h3>Webhook Discorda</h3></div>
+          <p class="admin-description">Ustaw webhook, na który użytkownicy będą mogli wysyłać bieżącą rotację. Adres jest widoczny i edytowalny wyłącznie w panelu administratora.</p>
+          <form id="admin-webhook-form" class="profile-form">
+            <label for="admin-webhook-url">ADRES WEBHOOKA DISCORDA</label>
+            <input id="admin-webhook-url" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://discord.com/api/webhooks/..." maxlength="512">
+            <p class="webhook-admin-note">Zostaw puste pole, aby usunąć skonfigurowany webhook.</p>
+            <p id="admin-webhook-error" class="auth-error" role="alert" aria-live="polite" hidden></p>
+            <button id="admin-webhook-save" class="auth-submit" type="submit">ZAPISZ WEBHOOK</button>
+          </form>
+        </section>
+        <section class="admin-webhook-section">
+          <div class="admin-section-heading"><h3>Reset hasła przez e-mail</h3></div>
+          <p class="admin-description">Skonfiguruj pocztę SMTP, aby użytkownicy mogli otrzymywać jednorazowe linki do zmiany hasła. Hasło SMTP jest szyfrowane przez Windows i przechowywane lokalnie.</p>
+          <form id="admin-smtp-form" class="profile-form">
+            <label for="admin-smtp-host">SERWER SMTP</label>
+            <input id="admin-smtp-host" type="text" maxlength="253" autocomplete="off" placeholder="smtp.example.com">
+            <label for="admin-smtp-port">PORT</label>
+            <input id="admin-smtp-port" type="number" min="1" max="65535" value="587" inputmode="numeric">
+            <label for="admin-smtp-security">SZYFROWANIE POŁĄCZENIA</label>
+            <select id="admin-smtp-security" required>
+              <option value="starttls">STARTTLS (zwykle port 587)</option>
+              <option value="ssl">SSL/TLS (zwykle port 465)</option>
+            </select>
+            <label for="admin-smtp-username">LOGIN SMTP (opcjonalnie)</label>
+            <input id="admin-smtp-username" type="text" maxlength="254" autocomplete="username">
+            <label for="admin-smtp-password">HASŁO SMTP</label>
+            <input id="admin-smtp-password" type="password" maxlength="512" autocomplete="new-password" placeholder="Pozostaw puste, aby zachować zapisane hasło">
+            <label for="admin-smtp-sender">ADRES NADAWCY</label>
+            <input id="admin-smtp-sender" type="email" maxlength="254" autocomplete="email" placeholder="abyssspin@example.com">
+            <label for="admin-reset-base-url">ADRES APLIKACJI W WIADOMOŚCI</label>
+            <input id="admin-reset-base-url" type="url" maxlength="512" autocomplete="url" placeholder="http://192.168.1.10:8765/">
+            <p class="webhook-admin-note">Adres musi być osiągalny dla użytkownika, który otworzy link resetujący. W sieci lokalnej wpisz adres IP tego komputera.</p>
+            <p id="admin-smtp-error" class="auth-error" role="alert" aria-live="polite" hidden></p>
+            <button id="admin-smtp-save" class="auth-submit" type="submit">ZAPISZ USTAWIENIA E-MAIL</button>
+          </form>
+        </section>
+      </section>
+    </dialog>
+
+    <dialog id="settings-dialog" class="profile-dialog settings-dialog" aria-labelledby="settings-title">
+      <section class="profile-panel">
+        <div class="profile-heading">
+          <div><p class="login-kicker"><i></i> ABYSS SPIN</p><h2 id="settings-title">Ustawienia<span>.</span></h2></div>
+          <button id="settings-close" class="profile-close" type="button" aria-label="Zamknij ustawienia">×</button>
+        </div>
+        <p class="settings-description">Zarządzaj kontem i ustawieniami aplikacji.</p>
+        <div class="settings-actions">
+          <button id="settings-profile" class="settings-action" type="button"><span class="settings-action-icon">◉</span><span><strong>Mój profil</strong><small>Avatar, dane konta i hasło</small></span><b>→</b></button>
+          <button id="settings-friends" class="settings-action" type="button"><span class="settings-action-icon">♧</span><span><strong>Moi znajomi</strong><small>Lista znajomych i prywatne wiadomości</small></span><b>→</b></button>
+          <button id="settings-notifications" class="settings-action" type="button"><span class="settings-action-icon">♢</span><span><strong>Powiadomienia</strong><small id="settings-notification-status">Włącz powiadomienia systemowe</small></span><b>→</b></button>
+          <button id="settings-admin" class="settings-action" type="button" hidden><span class="settings-action-icon">⚙</span><span><strong>Panel administracyjny</strong><small>Użytkownicy i webhook Discorda</small></span><b>→</b></button>
+          <button id="settings-logout" class="settings-action settings-logout" type="button"><span class="settings-action-icon">↪</span><span><strong>Wyloguj się</strong><small>Wyloguj konto na tym urządzeniu</small></span><b>→</b></button>
+        </div>
+      </section>
+    </dialog>
+
+    <dialog id="photo-import-dialog" class="profile-dialog photo-import-dialog">
+      <section class="profile-panel">
+        <div class="profile-heading">
+          <div><p class="login-kicker"><i></i> IMPORT ZE ZDJĘCIA</p><h2>Dodaj graczy<span>.</span></h2></div>
+          <button id="photo-import-close" class="profile-close" type="button" aria-label="Zamknij import zdjęcia">×</button>
+        </div>
+        <p class="photo-import-description">Sprawdź rozpoznane nicki i popraw je przed dodaniem do składu.</p>
+        <img id="photo-import-preview" class="photo-import-preview" alt="Podgląd wybranego zdjęcia">
+        <p id="photo-import-progress" class="photo-import-progress" role="status" aria-live="polite"></p>
+        <label class="photo-import-label" for="photo-import-names">NICKI GRACZY · JEDEN W KAŻDYM WIERSZU</label>
+        <textarea id="photo-import-names" class="photo-import-names" rows="7" maxlength="4096" placeholder="Rozpoznane nicki pojawią się tutaj..."></textarea>
+        <p class="photo-import-note">Zdjęcie jest analizowane lokalnie i nie jest wysyłane na serwer. Przy pierwszym użyciu wymagane jest połączenie z internetem, aby pobrać narzędzie OCR.</p>
+        <div class="photo-import-actions">
+          <button id="photo-import-cancel" class="outline-button" type="button">ANULUJ</button>
+          <button id="photo-import-add" class="add-button" type="button" disabled>DODAJ DO SKŁADU</button>
+        </div>
+      </section>
+    </dialog>
+
+    <dialog id="chat-dialog" class="chat-dialog" aria-labelledby="chat-title">
+      <section class="chat-window">
+        <header class="chat-heading">
+          <div>
+            <p class="chat-kicker"><i></i> EKIPA ABYSS SPIN</p>
+            <h2 id="chat-title">Chat <span>online.</span></h2>
+          </div>
+          <button id="chat-close" class="profile-close" type="button" aria-label="Zamknij czat">×</button>
+        </header>
+        <p id="chat-status" class="chat-status" role="status" aria-live="polite" hidden></p>
+        <div class="chat-content">
+          <aside class="chat-users" aria-label="Użytkownicy">
+            <section class="chat-user-section">
+              <h3>ONLINE <span id="chat-online-count">0</span></h3>
+              <ul id="chat-online-users" class="chat-user-list"></ul>
+            </section>
+            <section class="chat-user-section">
+              <h3>NIEAKTYWNI <span id="chat-offline-count">0</span></h3>
+              <ul id="chat-offline-users" class="chat-user-list"></ul>
+            </section>
+          </aside>
+          <section class="chat-main" aria-label="Wiadomości czatu">
+            <div id="chat-messages" class="chat-messages" aria-live="polite" aria-relevant="additions text">
+              <p id="chat-empty" class="chat-empty">Jeszcze nie ma wiadomości. Przywitaj się z ekipą!</p>
+            </div>
+            <div id="chat-emoji-picker" class="chat-emoji-picker" aria-label="Wybierz emotkę" hidden></div>
+            <form id="chat-form" class="chat-composer">
+              <button id="chat-emoji-button" class="chat-emoji-button" type="button" aria-label="Dodaj emotkę" aria-expanded="false">☺</button>
+              <label class="sr-only" for="chat-message-input">Napisz wiadomość</label>
+              <textarea id="chat-message-input" rows="1" maxlength="500" placeholder="Napisz wiadomość..." required></textarea>
+              <button id="chat-send" class="chat-send" type="submit">WYŚLIJ</button>
+            </form>
+          </section>
+        </div>
+      </section>
+    </dialog>
+
+    <dialog id="user-profile-dialog" class="profile-dialog user-profile-dialog" aria-labelledby="user-profile-title">
+      <section class="profile-panel">
+        <div class="profile-heading">
+          <div><p class="login-kicker"><i></i> PROFIL GRACZA</p><h2 id="user-profile-title">Profil<span>.</span></h2></div>
+          <button id="user-profile-close" class="profile-close" type="button" aria-label="Zamknij profil gracza">×</button>
+        </div>
+        <div class="public-profile-card">
+          <div class="public-profile-avatar"><span id="public-profile-initial">A</span><img id="public-profile-avatar" alt="Avatar użytkownika" hidden></div>
+          <div class="public-profile-identity"><strong id="public-profile-name">Gracz</strong><span id="public-profile-username">@gracz</span><small id="public-profile-presence">NIEAKTYWNY</small></div>
+        </div>
+        <dl class="public-profile-details">
+          <div><dt>NAZWA DISCORD</dt><dd id="public-profile-discord">—</dd></div>
+          <div><dt>ACTIVISION ID</dt><dd id="public-profile-activision">—</dd></div>
+        </dl>
+        <p id="user-profile-status" class="friends-status" role="status" aria-live="polite" hidden></p>
+        <div id="user-profile-actions" class="public-profile-actions"></div>
+      </section>
+    </dialog>
+
+    <dialog id="friends-dialog" class="profile-dialog friends-dialog" aria-labelledby="friends-title">
+      <section class="profile-panel">
+        <div class="profile-heading">
+          <div><p class="login-kicker"><i></i> TWOJA EKIPA</p><h2 id="friends-title">Znajomi<span>.</span></h2></div>
+          <button id="friends-close" class="profile-close" type="button" aria-label="Zamknij listę znajomych">×</button>
+        </div>
+        <p id="friends-status" class="friends-status" role="status" aria-live="polite" hidden></p>
+        <section class="friends-section">
+          <h3>Zaproszenia otrzymane <span id="friends-incoming-count">0</span></h3>
+          <div id="friends-incoming" class="friends-list"></div>
+          <p id="friends-incoming-empty" class="friends-empty">Brak nowych zaproszeń.</p>
+        </section>
+        <section class="friends-section">
+          <h3>Twoi znajomi <span id="friends-count">0</span></h3>
+          <div id="friends-list" class="friends-list"></div>
+          <p id="friends-empty" class="friends-empty">Nie masz jeszcze znajomych. Kliknij użytkownika na czacie, aby zobaczyć jego profil i wysłać zaproszenie.</p>
+        </section>
+        <section class="friends-section">
+          <h3>Zaproszenia wysłane <span id="friends-outgoing-count">0</span></h3>
+          <div id="friends-outgoing" class="friends-list"></div>
+          <p id="friends-outgoing-empty" class="friends-empty">Brak oczekujących zaproszeń.</p>
+        </section>
+      </section>
+    </dialog>
+
+    <dialog id="direct-message-dialog" class="profile-dialog direct-message-dialog" aria-labelledby="direct-message-title">
+      <section class="profile-panel direct-message-panel">
+        <div class="profile-heading">
+          <div><p class="login-kicker"><i></i> PRYWATNA ROZMOWA</p><h2 id="direct-message-title">Wiadomości<span>.</span></h2></div>
+          <button id="direct-message-close" class="profile-close" type="button" aria-label="Zamknij prywatną rozmowę">×</button>
+        </div>
+        <p id="direct-message-recipient" class="direct-message-recipient"></p>
+        <p id="direct-message-status" class="friends-status" role="status" aria-live="polite" hidden></p>
+        <div id="direct-message-list" class="direct-message-list" aria-live="polite" aria-relevant="additions text">
+          <p id="direct-message-empty" class="friends-empty">Nie ma jeszcze wiadomości. Napisz pierwszą.</p>
+        </div>
+        <form id="direct-message-form" class="direct-message-form">
+          <label class="sr-only" for="direct-message-input">Prywatna wiadomość</label>
+          <textarea id="direct-message-input" rows="2" maxlength="500" placeholder="Napisz prywatną wiadomość..." required></textarea>
+          <button id="direct-message-send" class="auth-submit" type="submit">WYŚLIJ</button>
+        </form>
+      </section>
+    </dialog>
+
+    <main class="app-shell" hidden>
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Abyss Spin — strona główna">
+          <span class="brand-mark"><svg class="brand-symbol" viewBox="0 0 32 32" aria-hidden="true"><path d="m6 21 6-3.3 1.1-4.8 9.5-5.1-3.2 7.3 6.1-3.3-4.1 8-5.7 2.6-3.4-2.4-4 4 .9-5.3z"/><path d="m11.4 19.3 5.5-3.2m-2.2 5 4.4-2.5m-6.6-4.2 4.3-2.3" /></svg></span>
+          <span class="brand-wordmark"><span class="brand-accent">ABYSS</span><b class="brand-spin">SPIN</b></span>
+        </a>
+        <div class="topbar-right"><span>CALL OF DUTY <b>/</b> WARZONE</span><i></i><button id="admin-button" class="admin-top-button" type="button" hidden>ADMIN <span id="admin-pending-badge" hidden>0</span></button><button id="friends-open" class="friends-open-button" type="button">ZNAJOMI <span id="friends-incoming-badge" hidden>0</span></button><button id="chat-open" class="chat-open-button" type="button" aria-label="Otwórz czat">CHAT <span id="chat-unread-count" hidden>0</span></button><button id="profile-button" class="account-button" type="button"><span id="account-avatar-initial">A</span><img id="account-avatar-image" alt="" hidden><strong id="current-user">PANEL GOTOWY</strong><span class="account-chevron">⌄</span></button><button id="logout-button" type="button">WYLOGUJ</button></div>
+      </header>
+
+      <div id="home-view" class="app-view">
+      <section class="hero">
+        <div>
+          <p class="eyebrow"><span></span> NARZĘDZIE DLA TWOJEGO SQUADU</p>
+          <h1>Rotacja <span>drużyn.</span></h1>
+          <p class="hero-copy">Sprawiedliwie rozdziel skład. Wybierz wielkość drużyn i przygotuj ekipę do kolejnego dropa.</p>
+        </div>
+        <div class="hero-emblem" aria-hidden="true"><span>⚒</span><small>OPERATION<br>ABYSS</small><i></i></div>
+      </section>
+
+      <section class="stats-row" aria-label="Statystyki rotacji">
+        <article class="stat-card"><span class="stat-icon red-icon">◇</span><div><small>GRACZE W SKŁADZIE</small><strong id="player-count">0</strong></div><span class="stat-note">SQUAD ONLINE</span></article>
+        <article class="stat-card"><span class="stat-icon blue-icon">▦</span><div><small>GOTOWE DRUŻYNY</small><strong id="team-count">0</strong></div><span class="stat-note">SKŁADY DO GRY</span></article>
+        <article class="stat-card"><span class="stat-icon purple-icon">◷</span><div><small>OSTATNIA ROTACJA</small><strong id="last-rotation">--:--</strong></div><span class="stat-note">CZAS MECZU</span></article>
+      </section>
+
+      <div class="workspace">
+        <section class="panel board-panel">
+          <div class="board-heading">
+            <div><p class="live-label"><i></i> LIVE SQUAD BOARD</p><h2 id="board-title">Gotowi do gry<span>.</span></h2><p id="result-summary" class="result-summary">Dodaj graczy, aby przygotować pierwszą rotację.</p></div>
+            <span id="board-badge" class="board-badge"><i></i> OCZEKIWANIE</span>
+          </div>
+          <div id="teams-container" class="teams-grid">
+            <div class="result-placeholder"><span>✳</span><strong>CZAS ZEBRAĆ SKŁAD</strong><p>Wynik rotacji pojawi się tutaj.</p></div>
+          </div>
+          <div class="rotation-flow"><span class="flow-label">KOLEJNOŚĆ ROTACJI</span><div id="rotation-flow-items" class="flow-items"><span>DODAJ GRACZY</span></div></div>
+          <div class="board-actions">
+            <button id="spin-button" class="primary-button" type="button"><span>⟳</span> LOSUJ ROTACJĘ</button>
+            <button id="copy-button" class="outline-button" type="button" disabled>▤ <span>KOPIUJ SKŁAD</span></button>
+            <button id="export-button" class="outline-button" type="button" disabled>↗ <span>ZAPISZ GRAFIKĘ</span></button>
+            <button id="webhook-button" class="outline-button webhook-button" type="button" disabled>➤ <span>WYŚLIJ NA DISCORDA</span></button>
+          </div>
+          <p id="status-message" class="status-message" role="status" aria-live="polite"></p>
+        </section>
+
+        <aside class="sidebar">
+          <section class="panel roster-panel">
+            <div class="section-heading">
+              <div><p class="side-eyebrow">USTAWIENIA SKŁADU</p><h2>Gracze</h2></div>
+              <span class="count-pill"><b id="player-count-copy">0</b> os.</span>
+            </div>
+            <div class="list-heading"><span>NICKI GRACZY</span><button class="text-button" id="import-button" type="button">TXT / CSV</button></div>
+            <ul id="player-list" class="player-list" aria-live="polite"></ul>
+            <p id="roster-empty" class="empty-note">Dodaj graczy ręcznie albo wczytaj plik TXT/CSV — po jednej nazwie w wierszu.</p>
+            <p class="roster-hint">Każdy gracz może sam wpisać lub zmienić swój nick. Nick zapisuje się automatycznie.</p>
+            <form id="add-player-form" class="add-player-form">
+              <label class="sr-only" for="player-name">Nazwa gracza</label>
+              <textarea id="player-name" name="player" rows="3" maxlength="4096" placeholder="Wpisz nicki — każdy w osobnym wierszu"></textarea>
+              <button class="add-button" type="submit">＋ DODAJ GRACZY</button>
+              <input id="import-file" type="file" accept=".txt,.csv,text/plain,text/csv" hidden>
+              <input id="photo-import-file" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+              <input id="camera-import-file" type="file" accept="image/*" capture="environment" hidden>
+            </form>
+            <div class="size-control"><label for="team-size">PREFEROWANY ROZMIAR DRUŻYNY</label><select id="team-size"><option value="4" selected>4 GRACZY</option><option value="3">3 GRACZY</option></select></div>
+            <p class="size-hint"><i></i> Drużyny liczą 3–4 osoby; preferowany skład: <span id="size-label">4</span></p>
+            <div class="photo-roster-actions">
+              <p>Dodaj skład ze zdjęcia</p>
+              <button class="photo-roster-button" id="camera-import-button" type="button"><span aria-hidden="true">◎</span> ZRÓB ZDJĘCIE</button>
+              <button class="photo-roster-button" id="photo-import-button" type="button"><span aria-hidden="true">▧</span> WYBIERZ ZDJĘCIE</button>
+            </div>
+          </section>
+
+          <section class="panel history-panel">
+            <div class="section-heading">
+              <div><p class="side-eyebrow">OSTATNIE LOSOWANIA</p><h2>Historia</h2></div>
+              <button class="text-button" id="reset-history" type="button">WYCZYŚĆ</button>
+            </div>
+            <div id="history-list" class="history-list"></div>
+            <p id="history-empty" class="empty-note history-empty">Rotacje zapisują się automatycznie na tym urządzeniu.</p>
+          </section>
+        </aside>
+      </div>
+      </div>
+
+      <section id="meta-view" class="app-view meta-view" hidden aria-labelledby="meta-title">
+        <header class="meta-heading">
+          <div><p class="eyebrow"><span></span> ABYSS SPIN · LOADOUT INTEL</p><h1 id="meta-title">Centrum <span>mety.</span></h1><p class="hero-copy">Dobierz broń i sprawdź gotowy zestaw dodatków do Warzone.</p></div>
+          <div class="meta-patch"><i></i><span>WARZONE · META</span></div>
+        </header>
+        <section class="meta-overview" aria-label="Podsumowanie mety">
+          <article class="meta-overview-card"><span class="meta-overview-icon">⌖</span><div><small>POLECANE BUILDY</small><strong id="meta-build-count">0</strong></div></article>
+          <article class="meta-overview-card"><span class="meta-overview-icon">▤</span><div><small>KATEGORIE BRONI</small><strong id="meta-category-count">0</strong></div></article>
+          <article class="meta-overview-card"><span class="meta-overview-icon">◷</span><div><small>OSTATNIA AKTUALIZACJA</small><strong id="meta-updated">—</strong></div></article>
+        </section>
+        <section class="meta-browser panel" aria-label="Wyszukiwanie i filtrowanie buildów">
+          <div class="meta-browser-heading">
+            <div><p class="side-eyebrow">ARSENAŁ / CALL OF DUTY: WARZONE</p><h2>Polecane zestawy<span>.</span></h2></div>
+            <label class="meta-search"><span aria-hidden="true">⌕</span><input id="meta-search" type="search" autocomplete="off" placeholder="Szukaj broni lub stylu gry" aria-label="Szukaj broni lub stylu gry"></label>
+          </div>
+          <div id="meta-filters" class="meta-filters" role="group" aria-label="Filtruj kategorię broni">
+            <button class="meta-filter is-active" type="button" data-meta-filter="all" aria-pressed="true">Wszystkie</button>
+            <button class="meta-filter" type="button" data-meta-filter="ar" aria-pressed="false">Karabiny szturmowe</button>
+            <button class="meta-filter" type="button" data-meta-filter="smg" aria-pressed="false">SMG</button>
+            <button class="meta-filter" type="button" data-meta-filter="sniper" aria-pressed="false">Snajperskie</button>
+            <button class="meta-filter" type="button" data-meta-filter="other" aria-pressed="false">Pozostałe</button>
+          </div>
+          <div id="meta-weapons" class="meta-weapons" aria-live="polite"></div>
+          <div id="meta-empty" class="meta-empty" hidden>
+            <span class="meta-empty-icon">⌖</span>
+            <h3>Nie znaleziono zestawów</h3>
+            <p>Zmień kategorię albo wpisz inną nazwę broni.</p>
+          </div>
+          <p class="meta-disclaimer">Meta zmienia się wraz z aktualizacjami gry. Skopiuj kod i użyj opcji importu zestawu w grze.</p>
+        </section>
+      </section>
+
+      <footer class="app-footer">
+        <span class="footer-brand-mark" aria-label="Abyss Spin"><svg class="brand-symbol" viewBox="0 0 32 32" role="img" aria-hidden="true"><path d="m6 21 6-3.3 1.1-4.8 9.5-5.1-3.2 7.3 6.1-3.3-4.1 8-5.7 2.6-3.4-2.4-4 4 .9-5.3z"/><path d="m11.4 19.3 5.5-3.2m-2.2 5 4.4-2.5m-6.6-4.2 4.3-2.3"/></svg><strong><span>ABYSS</span> <b class="brand-spin">SPIN</b></strong><i>· created by Kreda95</i></span>
+        <nav class="legal-links" aria-label="Informacje prawne">
+          <a href="terms.html">Warunki korzystania</a><span aria-hidden="true">·</span><a href="privacy.html">Polityka prywatności</a>
+        </nav>
+      </footer>
+    </main>
+    <nav id="bottom-nav" class="bottom-nav" aria-label="Menu główne" hidden>
+      <button class="bottom-nav-item is-active" type="button" data-nav="home" aria-current="page"><span aria-hidden="true">⌂</span><small>Główna</small></button>
+      <button class="bottom-nav-item" type="button" data-nav="chat"><span aria-hidden="true">◌</span><small>Chat</small></button>
+      <button class="bottom-nav-item" type="button" data-nav="meta"><span aria-hidden="true">⌖</span><small>Meta</small></button>
+      <button class="bottom-nav-item" type="button" data-nav="settings"><span aria-hidden="true">⚙</span><small>Ustawienia</small></button>
+    </nav>
+    <script src="auth.js?v=20261007-hosted1"></script>
+    <script src="chat.js?v=20261007-notifications1"></script>
+    <script src="app.js?v=20261007-vercel1"></script>
+  </body>
+</html>
